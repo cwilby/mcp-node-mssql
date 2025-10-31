@@ -1,5 +1,7 @@
 # mcp-node-mssql
 
+> ⚠️ Keep [bobby tables](https://xkcd.com/327/) at bay.  Test this with read-only access first.
+
 ## Usage
 
 ### Cursor
