@@ -1,7 +1,5 @@
 # mcp-node-mssql
 
-> ⚠️ Keep [bobby tables](https://xkcd.com/327/) at bay.  Test this with read-only access first.
-
 ## Usage
 
 ### Cursor
@@ -25,7 +23,13 @@ See the [official Cursor docs](https://docs.cursor.com/context/model-context-pro
         "DB_PORT": "1433",
         "DB_USERNAME": "<username>",
         "DB_PASSWORD": "<password>",
-        "DB_DATABASE": "<database>"
+        "DB_DATABASE": "<database>",
+        "CONNECTION_TIMEOUT": 60000,
+        "REQUEST_TIMEOUT": 30000
+        "DB_ENCRYPT": "false",
+        "DB_ENABLE_ARITH_ABORT": "false",
+        "DB_TRUST_SERVER_CERTIFICATE": "false",
+        "TRUSTED_CONNECTION": "false"
       }
     }
   }
@@ -54,7 +58,13 @@ See the [official Windsurf docs](https://codeium.com/docs/windsurf/mcp) for more
         "DB_PORT": "1433",
         "DB_USERNAME": "<username>",
         "DB_PASSWORD": "<password>",
-        "DB_DATABASE": "<database>"
+        "DB_DATABASE": "<database>",
+        "CONNECTION_TIMEOUT": 60000,
+        "REQUEST_TIMEOUT": 30000
+        "DB_ENCRYPT": "false",
+        "DB_ENABLE_ARITH_ABORT": "false",
+        "DB_TRUST_SERVER_CERTIFICATE": "false",
+        "TRUSTED_CONNECTION": "false"
       }
     }
   }
@@ -86,7 +96,13 @@ _You can add a new MCP server from the Claude Code CLI. But modifying the json f
           "DB_PORT": "1433",
           "DB_USERNAME": "<username>",
           "DB_PASSWORD": "<password>",
-          "DB_DATABASE": "<database>"
+          "DB_DATABASE": "<database>",
+          "CONNECTION_TIMEOUT": 60000,
+          "REQUEST_TIMEOUT": 30000
+          "DB_ENCRYPT": "false",
+          "DB_ENABLE_ARITH_ABORT": "false",
+          "DB_TRUST_SERVER_CERTIFICATE": "false",
+          "TRUSTED_CONNECTION": "false"
         }
       }
     }
@@ -137,7 +153,13 @@ npm run build
         "DB_PORT": "1433",
         "DB_USERNAME": "<username>",
         "DB_PASSWORD": "<password>",
-        "DB_DATABASE": "<database>"
+        "DB_DATABASE": "<database>",
+        "CONNECTION_TIMEOUT": 60000,
+        "REQUEST_TIMEOUT": 30000
+        "DB_ENCRYPT": "false",
+        "DB_ENABLE_ARITH_ABORT": "false",
+        "DB_TRUST_SERVER_CERTIFICATE": "false",
+        "TRUSTED_CONNECTION": "false"
       }
     }
   }
