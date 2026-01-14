@@ -24,8 +24,8 @@ See the [official Cursor docs](https://docs.cursor.com/context/model-context-pro
         "DB_USERNAME": "<username>",
         "DB_PASSWORD": "<password>",
         "DB_DATABASE": "<database>",
-        "CONNECTION_TIMEOUT": 60000,
-        "REQUEST_TIMEOUT": 30000
+        "CONNECTION_TIMEOUT": 600000,
+        "REQUEST_TIMEOUT": 300000
         "DB_ENCRYPT": "false",
         "DB_ENABLE_ARITH_ABORT": "false",
         "DB_TRUST_SERVER_CERTIFICATE": "false",
@@ -59,8 +59,8 @@ See the [official Windsurf docs](https://codeium.com/docs/windsurf/mcp) for more
         "DB_USERNAME": "<username>",
         "DB_PASSWORD": "<password>",
         "DB_DATABASE": "<database>",
-        "CONNECTION_TIMEOUT": 60000,
-        "REQUEST_TIMEOUT": 30000
+        "CONNECTION_TIMEOUT": 600000,
+        "REQUEST_TIMEOUT": 300000
         "DB_ENCRYPT": "false",
         "DB_ENABLE_ARITH_ABORT": "false",
         "DB_TRUST_SERVER_CERTIFICATE": "false",
@@ -97,8 +97,8 @@ _You can add a new MCP server from the Claude Code CLI. But modifying the json f
           "DB_USERNAME": "<username>",
           "DB_PASSWORD": "<password>",
           "DB_DATABASE": "<database>",
-          "CONNECTION_TIMEOUT": 60000,
-          "REQUEST_TIMEOUT": 30000
+          "CONNECTION_TIMEOUT": 600000,
+          "REQUEST_TIMEOUT": 300000
           "DB_ENCRYPT": "false",
           "DB_ENABLE_ARITH_ABORT": "false",
           "DB_TRUST_SERVER_CERTIFICATE": "false",
@@ -154,8 +154,8 @@ npm run build
         "DB_USERNAME": "<username>",
         "DB_PASSWORD": "<password>",
         "DB_DATABASE": "<database>",
-        "CONNECTION_TIMEOUT": 60000,
-        "REQUEST_TIMEOUT": 30000
+        "CONNECTION_TIMEOUT": 600000,
+        "REQUEST_TIMEOUT": 300000
         "DB_ENCRYPT": "false",
         "DB_ENABLE_ARITH_ABORT": "false",
         "DB_TRUST_SERVER_CERTIFICATE": "false",
