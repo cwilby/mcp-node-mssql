@@ -3,6 +3,9 @@ import { z } from "zod";
 import { BaseTools } from "./base";
 import * as database from "../utils/database";
 
+// INFORMATION_SCHEMA.ROUTINES.ROUTINE_DEFINITION is cut at 4000 characters; OBJECT_DEFINITION returns the whole body.
+const FULL_DEFINITION = "OBJECT_DEFINITION(OBJECT_ID(QUOTENAME(ROUTINE_SCHEMA) + '.' + QUOTENAME(ROUTINE_NAME)))";
+
 export class SchemaTools extends BaseTools {
     static create(server: McpServer) {
         const tools = new SchemaTools();
@@ -94,7 +97,7 @@ export class SchemaTools extends BaseTools {
 
     async getStoredProcedures() {
         const procedures = await database.query(`
-            SELECT ROUTINE_NAME, ROUTINE_TYPE, ROUTINE_DEFINITION
+            SELECT ROUTINE_NAME, ROUTINE_TYPE, ${FULL_DEFINITION} AS ROUTINE_DEFINITION
             FROM INFORMATION_SCHEMA.ROUTINES
             WHERE ROUTINE_TYPE = 'PROCEDURE'
         `);
@@ -106,10 +109,10 @@ export class SchemaTools extends BaseTools {
 
     async getStoredProcedure({ procedureName }: { procedureName: string }) {
         const procedure = await database.query(`
-            SELECT ROUTINE_NAME, ROUTINE_TYPE, ROUTINE_DEFINITION
+            SELECT ROUTINE_NAME, ROUTINE_TYPE, ${FULL_DEFINITION} AS ROUTINE_DEFINITION
             FROM INFORMATION_SCHEMA.ROUTINES
-            WHERE ROUTINE_NAME = ?
-        `, [procedureName]);
+            WHERE ROUTINE_NAME = @procedureName
+        `, { procedureName });
 
         if (!procedure.length) return this.toResult(`Stored procedure with name: ${procedureName} not found.`);
 
