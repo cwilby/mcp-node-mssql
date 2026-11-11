@@ -9,8 +9,8 @@ export class QueryTools extends BaseTools {
 
         server.tool(
             "query",
-            "Query the database with a SQL statement",
-            { query: z.string().describe("The SQL query to execute") },
+            "Query the database with a SQL statement. Lines containing only GO split the script into batches, as in sqlcmd/SSMS.",
+            { query: z.string().describe("The SQL query or script to execute") },
             tools.query.bind(tools)
         );
 
@@ -18,8 +18,18 @@ export class QueryTools extends BaseTools {
     }
 
     async query({ query }: { query: string }) {
-        const results = await database.query(query);
-        if (!results.length) return this.toResult("No results found for the query.");
-        return this.toResult(JSON.stringify(results));
+        const results = await database.executeScript(query);
+        const recordsets = results.flatMap((result) => result.recordsets);
+
+        // DDL/DML return no result set; the old code read `.length` of undefined and reported a false error.
+        if (recordsets.length === 0) {
+            const rowsAffected = results.flatMap((result) => result.rowsAffected).reduce((sum, rows) => sum + rows, 0);
+            return this.toResult(`Executed ${results.length} batch(es) successfully. Rows affected: ${rowsAffected}.`);
+        }
+        if (recordsets.length === 1) {
+            if (!recordsets[0].length) return this.toResult("No results found for the query.");
+            return this.toResult(JSON.stringify(recordsets[0]));
+        }
+        return this.toResult(JSON.stringify(recordsets));
     }
 }

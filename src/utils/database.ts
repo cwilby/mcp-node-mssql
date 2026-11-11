@@ -1,7 +1,11 @@
 import mssql from 'mssql';
 
 export async function connect(): Promise<mssql.ConnectionPool> {
-	return mssql.connect({
+	return mssql.connect(config());
+}
+
+function config(): mssql.config {
+	return {
 		server: process.env.DB_HOST ?? '',
 		port: Number(process.env.DB_PORT ?? 1433),
 		user: process.env.DB_USERNAME,
@@ -15,7 +19,41 @@ export async function connect(): Promise<mssql.ConnectionPool> {
 			trustServerCertificate: process.env.DB_TRUST_SERVER_CERTIFICATE === 'true',
 			trustedConnection: process.env.TRUSTED_CONNECTION === 'true'
 		}
-	});
+	};
+}
+
+/**
+ * Splits a script on `GO` separator lines, like sqlcmd and SSMS do.
+ * Limitation: a `GO` line inside a multi-line string or block comment is still treated as a separator.
+ */
+export function splitBatches(script: string): string[] {
+	return script.split(/^[ \t]*GO[ \t]*\r?$/gim).filter((batch) => batch.trim() !== '');
+}
+
+export type BatchResult = { recordsets: mssql.IRecordSet<any>[]; rowsAffected: number[] };
+
+/**
+ * Runs each batch in order on a single connection, so USE, SET and #temp tables carry over between batches.
+ */
+export async function executeScript(script: string): Promise<BatchResult[]> {
+	const batches = splitBatches(script);
+	const pool = await new mssql.ConnectionPool({ ...config(), pool: { min: 0, max: 1 } }).connect();
+	try {
+		const results: BatchResult[] = [];
+		for (const [index, batch] of batches.entries()) {
+			try {
+				const { recordsets, rowsAffected } = await pool.request().batch(batch);
+				results.push({ recordsets: recordsets as mssql.IRecordSet<any>[], rowsAffected });
+			} catch (err) {
+				if (batches.length === 1) throw err;
+				const message = err instanceof Error ? err.message : String(err);
+				throw new Error(`Batch ${index + 1} of ${batches.length} failed (batches before it were executed): ${message}`);
+			}
+		}
+		return results;
+	} finally {
+		await pool.close();
+	}
 }
 
 export async function usingConnection<T>(callback: (connection: mssql.ConnectionPool) => Promise<T>): Promise<T> {
